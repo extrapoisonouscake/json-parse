@@ -1,0 +1,5 @@
+[
+  { "lastName": "Smith", "firstName": "John", "province": "Ontario" },
+  { "lastName": "Doe", "firstName": "Jane", "province": "Quebec" },
+  { "lastName": "Brown", "firstName": "Michael", "province": "Alberta" }
+]
