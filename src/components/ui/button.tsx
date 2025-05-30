@@ -38,8 +38,6 @@ export interface ButtonProps
   extends Omit<IntrinsicButtonProps, "onClick">,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  isLoading?: boolean;
-  shouldShowChildrenOnLoading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   onClick?: (
@@ -72,31 +70,23 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant,
       size,
       asChild = false,
-      isLoading: externalIsLoading = false,
-      shouldShowChildrenOnLoading = false,
       leftIcon,
       rightIcon,
-      disabled,
+
       ...props
     },
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
-    const [isLoading, setIsLoading] = React.useState(externalIsLoading);
-    const hasExternalIsLoading = typeof externalIsLoading === "boolean";
-    const derivedIsLoading = hasExternalIsLoading
-      ? externalIsLoading
-      : isLoading;
+    const [isLoading, setIsLoading] = React.useState(false);
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
-        disabled={disabled || derivedIsLoading}
         {...props}
         onClick={
-          hasExternalIsLoading
-            ? onClick
-            : onClick
+          onClick
             ? async (e) => {
                 setIsLoading(true);
                 try {
@@ -108,8 +98,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         }
       >
         <>
-          {derivedIsLoading ? <Spinner /> : leftIcon}
-          {(!derivedIsLoading || shouldShowChildrenOnLoading) && children}
+          {isLoading ? <Spinner /> : leftIcon}
+          {children}
           {rightIcon}
         </>
       </Comp>

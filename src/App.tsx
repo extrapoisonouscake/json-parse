@@ -2,6 +2,7 @@ import { AlertCircleIcon, Check } from "lucide-react";
 import { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "./components/ui/alert";
 import { Button } from "./components/ui/button";
+import { cn } from "./lib/utils";
 import { ResultTable } from "./result-table";
 import { type Person } from "./types";
 
@@ -16,8 +17,10 @@ const filesLabels: Record<Files, string> = {
 export default function App() {
   const [currentFile, setCurrentFile] = useState<Files | null>(null);
   const [data, setData] = useState<Person[] | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
   const [isError, setIsError] = useState(false);
   const fetchFile = async (fileName: Files) => {
+    setIsFetching(true);
     setCurrentFile(fileName);
     setData(null);
     setIsError(false);
@@ -29,6 +32,7 @@ export default function App() {
     } catch {
       setIsError(true);
     }
+    setIsFetching(false);
   };
   return (
     <div className="mx-auto flex flex-col gap-4 justify-center items-center p-8 w-full max-w-[800px]">
@@ -36,9 +40,12 @@ export default function App() {
         <p className="text-center text-sm">Select the file:</p>
         <div className="flex gap-2 flex-wrap">
           {Object.values(Files).map((fileName) => (
-            <Button onClick={() => fetchFile(fileName)}>
+            <Button
+              className={cn({ "pointer-events-none": isFetching })}
+              onClick={() => fetchFile(fileName)}
+              leftIcon={fileName === currentFile ? <Check /> : undefined}
+            >
               {filesLabels[fileName]}
-              {fileName === currentFile && <Check />}
             </Button>
           ))}
         </div>
