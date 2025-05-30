@@ -13,16 +13,16 @@ export function ResultTable({ data }: { data: Person[] }) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>First Name</TableHead>
           <TableHead>Last Name</TableHead>
+          <TableHead>First Name</TableHead>
           <TableHead>Province</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {data.map(({ firstName, lastName, province }, i) => (
           <TableRow key={i}>
-            <TableCell>{firstName}</TableCell>
             <TableCell>{lastName}</TableCell>
+            <TableCell>{firstName}</TableCell>
             <TableCell>{province}</TableCell>
           </TableRow>
         ))}
